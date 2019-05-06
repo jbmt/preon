@@ -24,7 +24,6 @@
  */
 package org.codehaus.preon.buffer;
 
-import org.apache.commons.lang.SystemUtils;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,7 +33,7 @@ public class ByteOrderTest {
 
     @Test
     public void shouldReturnProperByteOrder() {
-        if ("x86_64".equals(SystemUtils.OS_ARCH)) {
+        if ("x86_64".equals(System.getProperty("os.arch"))) {
             assertThat(ByteOrder.Native, is(ByteOrder.LittleEndian));
         }
     }
