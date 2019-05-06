@@ -24,9 +24,6 @@
  */
 package org.codehaus.preon.buffer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
@@ -39,8 +36,6 @@ import java.nio.channels.FileChannel;
  * @since Feb 18, 2007
  */
 public class DefaultBitBuffer implements BitBuffer {
-
-    static Log log = LogFactory.getLog(DefaultBitBuffer.class);
 
     private ByteBuffer byteBuffer;
 
