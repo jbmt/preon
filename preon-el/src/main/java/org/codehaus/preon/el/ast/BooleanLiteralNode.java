@@ -24,7 +24,6 @@
  */
 package org.codehaus.preon.el.ast;
 
-import org.codehaus.preon.el.Document;
 import org.codehaus.preon.el.Reference;
 import org.codehaus.preon.el.ReferenceContext;
 
@@ -62,7 +61,4 @@ public class BooleanLiteralNode<E> extends AbstractNode<Boolean, E> {
         return false;
     }
 
-    public void document(Document target) {
-        target.text(Boolean.toString(value));
-    }
 }

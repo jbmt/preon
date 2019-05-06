@@ -24,15 +24,13 @@
  */
 package org.codehaus.preon.binding;
 
-import org.codehaus.preon.el.Expression;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
 import org.codehaus.preon.Builder;
 import org.codehaus.preon.Codec;
 import org.codehaus.preon.DecodingException;
 import org.codehaus.preon.Resolver;
-import org.codehaus.preon.channel.BitChannel;
 import org.codehaus.preon.buffer.BitBuffer;
+import org.codehaus.preon.channel.BitChannel;
+import org.codehaus.preon.el.Expression;
 
 import java.io.IOException;
 
@@ -71,26 +69,6 @@ public interface Binding {
     void load(Object object, BitBuffer buffer, Resolver resolver,
               Builder builder) throws DecodingException;
 
-    /**
-     * Describes this {@link Binding} in the paragraph passed in.
-     *
-     * @param <T>
-     *            The type of the container for this paragraph.
-     * @param <V>
-     *            The paragraph in which the content has been written.
-     * @param contents
-     *            The paragraph in which content will be written.
-     * @param resolver
-     *            The object capable of rendering references in a human-readable
-     *            way.
-     * @return The same object as passed in.
-     */
-    <V extends SimpleContents<?>> V describe(V contents);
-
-    /**
-     * Writes a (potentially hyperlinked) reference in the paragraph passed in.
-     */
-    <T, V extends ParaContents<T>> V writeReference(V contents);
 
     /**
      * Returns an array of types that could potentially be instantiated while

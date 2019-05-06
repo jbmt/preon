@@ -53,9 +53,5 @@ public class ImplicitsContext<E> implements ReferenceContext<E> {
         return nested.selectItem(index);
     }
 
-    public void document(Document target) {
-        nested.document(target);
-    }
-
 }
 

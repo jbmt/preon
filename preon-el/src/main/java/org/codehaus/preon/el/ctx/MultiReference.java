@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.preon.el.BindingException;
-import org.codehaus.preon.el.Document;
 import org.codehaus.preon.el.Expression;
 import org.codehaus.preon.el.Reference;
 import org.codehaus.preon.el.ReferenceContext;
@@ -141,23 +140,6 @@ public class MultiReference<E> implements Reference<E> {
             }
         }
         return new MultiReference<E>(results.toArray(REFERENCE_ARRAY_TYPE));
-    }
-
-    public void document(Document target) {
-        if (references.length > 1) {
-            target.text("either ");
-        }
-        references[0].document(target);
-        if (references.length > 2) {
-            for (int i = 1; i <= references.length - 2; i++) {
-                target.text(", ");
-                references[i].document(target);
-            }
-        }
-        if (references.length > 1) {
-            target.text(" or ");
-            references[references.length - 1].document(target);
-        }
     }
 
     public boolean isAssignableTo(Class<?> type) {

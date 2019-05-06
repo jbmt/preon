@@ -24,8 +24,6 @@
  */
 package org.codehaus.preon.codec;
 
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
 import org.codehaus.preon.*;
 import org.codehaus.preon.annotation.Bound;
 import org.codehaus.preon.annotation.BoundObject;
@@ -177,21 +175,16 @@ public class ObjectCodecFactory implements CodecFactory {
                         context);
                 if (codec != null) {
                     Binding binding = bindingFactory.create(field, field,
-                            codec, context, reference);
+                            codec, context);
                     context.add(field.getName(), binding);
                 }
             }
         }
     }
 
-    private static class CodecReference implements Documenter<ParaContents<?>> {
+    private static class CodecReference {
 
         private Codec<?> codec;
-
-        public void document(ParaContents<?> target) {
-            target.document(codec.getCodecDescriptor().reference(CodecDescriptor.Adjective.THE,
-                    false));
-        }
 
         public void setCodec(Codec<?> codec) {
             this.codec = codec;

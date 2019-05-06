@@ -24,14 +24,10 @@
  */
 package org.codehaus.preon.binding;
 
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
 import org.codehaus.preon.*;
 import org.codehaus.preon.annotation.If;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
-import org.codehaus.preon.descriptor.Documenters;
 import org.codehaus.preon.el.*;
 
 import java.io.IOException;
@@ -71,20 +67,20 @@ public class ConditionalBindingFactory implements BindingFactory {
      */
 
     public Binding create(AnnotatedElement metadata, Field field, Codec<?> codec,
-                          ResolverContext context, Documenter<ParaContents<?>> containerReference) {
+                          ResolverContext context) {
         If condition = metadata.getAnnotation(If.class);
         if (condition != null) {
             Expression<Boolean, Resolver> expr = null;
             String value = condition.value();
             try {
                 expr = Expressions.createBoolean(context, value);
-                return new ConditionalBinding(expr, decorated.create(metadata, field, codec, context, containerReference));
+                return new ConditionalBinding(expr, decorated.create(metadata, field, codec, context));
             } catch (InvalidExpressionException e) {
                 System.err.println("All wrong");
                 throw e;
             }
         } else {
-            return decorated.create(metadata, field, codec, context, containerReference);
+            return decorated.create(metadata, field, codec, context);
         }
     }
 
@@ -106,28 +102,6 @@ public class ConditionalBindingFactory implements BindingFactory {
             }
         }
 
-        public <T, V extends ParaContents<T>> V describe(final V contents) {
-            contents.text(" Only if ");
-            expr.document(new Document() {
-
-                public Document detail(String summary) {
-                    // TODO Auto-generated method stub
-                    return null;
-                }
-
-                public void link(Object object, String text) {
-                    contents.link(object, text);
-                }
-
-                public void text(String text) {
-                    contents.text(text);
-                }
-
-            });
-            contents.text(".");
-            return contents;
-        }
-
         public Class<?>[] getTypes() {
             return binding.getTypes();
         }
@@ -138,10 +112,6 @@ public class ConditionalBindingFactory implements BindingFactory {
 
         public String getName() {
             return binding.getName();
-        }
-
-        public <T, V extends ParaContents<T>> V writeReference(V contents) {
-            return binding.writeReference(contents);
         }
 
         public Expression<Integer, Resolver> getSize() {
@@ -160,12 +130,6 @@ public class ConditionalBindingFactory implements BindingFactory {
             if (expr.eval(resolver)) {
                 binding.save(value, channel, resolver);
             }
-        }
-
-        public <V extends SimpleContents<?>> V describe(V contents) {
-            binding.describe(contents);
-            contents.para().text("Only if ").document(Documenters.forExpression(expr)).text(".").end();
-            return contents;
         }
 
     }
@@ -212,15 +176,6 @@ public class ConditionalBindingFactory implements BindingFactory {
         public Expression<Integer, Resolver> rescope(ReferenceContext<Resolver> context) {
             return new ConditionalValue(condition.rescope(context), expr.rescope(context));
         }
-
-        public void document(Document document) {
-            expr.document(document);
-            document.text(" if ");
-            condition.document(document);
-            document.text(" or else 0");
-        }
-
-
     }
 
 }

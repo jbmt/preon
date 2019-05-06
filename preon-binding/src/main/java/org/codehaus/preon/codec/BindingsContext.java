@@ -30,11 +30,9 @@ import java.util.List;
 
 import org.codehaus.preon.el.*;
 import org.codehaus.preon.el.ctx.MultiReference;
-import org.codehaus.preon.el.util.StringBuilderDocument;
 import org.codehaus.preon.Resolver;
 import org.codehaus.preon.ResolverContext;
 import org.codehaus.preon.binding.Binding;
-import org.codehaus.preon.util.ParaContentsDocument;
 
 /**
  * A {@link ResolverContext} based on a collection of {@link Binding Bindings}.
@@ -118,30 +116,7 @@ public class BindingsContext implements ObjectResolverContext {
     public Reference<Resolver> selectItem(Expression<Integer, Resolver> index)
             throws BindingException {
         StringBuilder builder = new StringBuilder();
-        index.document(new StringBuilderDocument(builder));
         throw new BindingException("Cannot resolve index on BindingContext.");
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.codehaus.preon.el.Descriptive#document(org.codehaus.preon.el.Document)
-     */
-
-    public void document(Document target) {
-        if (bindingsByName.size() > 0) {
-            target.text("one of ");
-            boolean passedFirst = false;
-            for (Binding binding : bindingsByName.values()) {
-                if (passedFirst) {
-                    target.text(", ");
-                }
-                target.text(binding.getName());
-                passedFirst = true;
-            }
-        } else {
-            target.text("no variables");
-        }
     }
 
     /*
@@ -297,17 +272,6 @@ public class BindingsContext implements ObjectResolverContext {
                         .getComponentType(), index, BindingsContext.this);
             }
         }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.codehaus.preon.el.Descriptive#document(org.codehaus.preon.el.Document)
-         */
-
-        public void document(final Document target) {
-            binding.writeReference(new ParaContentsDocument(target));
-        }
-
         /*
          * (non-Javadoc)
          * 
@@ -379,11 +343,9 @@ public class BindingsContext implements ObjectResolverContext {
                     Binding binding = bindingsByName.get(name);
 
                     if (context == null) {
-                        StringBuilderDocument document = new StringBuilderDocument();
                         // TODO:
 //                        binding.describe(new ParaContentsDocument(document));
                         throw new BindingException("Failed to resolve "
-                                + document.toString()
                                 + " due to incomplete context.");
                     }
 

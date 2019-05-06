@@ -167,10 +167,6 @@ public class OuterResolvingReference implements Reference<Resolver> {
      * @see org.codehaus.preon.el.Descriptive#document(org.codehaus.preon.el.Document)
      */
 
-    public void document(Document target) {
-        wrapped.document(target);
-    }
-
     private static class OriginalReplacingResolver implements Resolver {
 
         private Resolver originalResolver;

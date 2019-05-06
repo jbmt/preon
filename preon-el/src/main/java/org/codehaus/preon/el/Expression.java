@@ -53,7 +53,7 @@ import java.util.Set;
  * @param <C>
  * The type of context to which this expression applies.
  */
-public interface Expression<R, C> extends Descriptive {
+public interface Expression<R, C> {
 
     /**
      * Evaluates the expression and returns the result.

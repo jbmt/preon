@@ -25,7 +25,6 @@
 package org.codehaus.preon.el.ctx;
 
 import org.codehaus.preon.el.BindingException;
-import org.codehaus.preon.el.Document;
 import org.codehaus.preon.el.Expression;
 import org.codehaus.preon.el.Reference;
 import org.codehaus.preon.el.ReferenceContext;
@@ -89,10 +88,6 @@ public class VariableContext implements ReferenceContext<VariableResolver> {
             return context.defs.equals(other.context.defs);
         }
 
-        public void document(Document target) {
-            target.text("the " + name);
-        }
-
         public ReferenceContext<VariableResolver> getReferenceContext() {
             return context;
         }
@@ -132,10 +127,6 @@ public class VariableContext implements ReferenceContext<VariableResolver> {
     public Reference<VariableResolver> selectItem(
             Expression<Integer, VariableResolver> index) {
         throw new BindingException("Index not supported");
-    }
-
-    public void document(Document target) {
-        defs.document(target);
     }
 
 }

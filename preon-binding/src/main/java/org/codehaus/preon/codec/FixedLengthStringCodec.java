@@ -24,24 +24,21 @@
  */
 package org.codehaus.preon.codec;
 
-import org.codehaus.preon.el.Expression;
-import org.codehaus.preon.el.Expressions;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
-import org.codehaus.preon.*;
+import org.codehaus.preon.Builder;
+import org.codehaus.preon.Codec;
+import org.codehaus.preon.DecodingException;
+import org.codehaus.preon.Resolver;
 import org.codehaus.preon.annotation.BoundString;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.io.StringWriter;
-import java.nio.BufferUnderflowException;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
-import org.codehaus.preon.descriptor.Documenters;
+import org.codehaus.preon.el.Expression;
+import org.codehaus.preon.el.Expressions;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 
 /**
  * A {@link org.codehaus.preon.Codec} decoding Strings based on a fixed number of <em>bytes</em>. (Note that it says
@@ -125,58 +122,5 @@ public class FixedLengthStringCodec implements Codec<String> {
 
     public Class<?> getType() {
         return String.class;
-    }
-
-    public CodecDescriptor getCodecDescriptor() {
-        return new CodecDescriptor() {
-
-            public <C extends SimpleContents<?>> Documenter<C> details(
-                    String bufferReference) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target
-                                .para()
-                                .text("The number of characters of the string is ")
-                                .document(
-                                        Documenters.forExpression(sizeExpr))
-                                .text(".").end();
-                        if (match != null && match.length() > 0) {
-                            target.para().text(
-                                    "The string is expected to match \"")
-                                    .text(match).text("\".").end();
-                        }
-                    }
-                };
-            }
-
-            public String getTitle() {
-                return null;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> reference(
-                    final Adjective adjective, boolean startWithCapital) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target.text(adjective.asTextPreferA(false)).text(
-                                "string of characters");
-                    }
-                };
-            }
-
-            public boolean requiresDedicatedSection() {
-                return false;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> summary() {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target
-                                .text("A sequence of characters, encoded in "
-                                        + encoding + ".");
-                    }
-                };
-            }
-
-        };
     }
 }

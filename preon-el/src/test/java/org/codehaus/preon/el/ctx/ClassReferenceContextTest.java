@@ -25,7 +25,7 @@
 package org.codehaus.preon.el.ctx;
 
 import org.codehaus.preon.el.*;
-import org.codehaus.preon.el.util.StringBuilderDocument;
+
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -41,27 +41,6 @@ public class ClassReferenceContextTest {
         wilfred.name = "Wilfred";
         wilfred.age = 35;
         assertEquals(70, expr.eval(wilfred).intValue());
-    }
-    @Test
-    public void testValidReferences() {
-        ReferenceContext<Person> context = new ClassReferenceContext<Person>(
-                Person.class);
-        Reference<Person> personsName = context.selectAttribute("name");
-        Reference<Person> fathersName = context.selectAttribute("father")
-                .selectAttribute("name");
-        Person wilfred = new Person();
-        wilfred.name = "Wilfred";
-        wilfred.age = 35;
-        Person levi = new Person();
-        levi.name = "Levi";
-        levi.age = 8;
-        levi.father = wilfred;
-        assertEquals("Levi", personsName.resolve(levi));
-        assertEquals("Wilfred", fathersName.resolve(levi));
-        assertEquals("Wilfred", personsName.resolve(wilfred));
-        StringBuilder builder = new StringBuilder();
-        fathersName.document(new StringBuilderDocument(builder));
-        System.out.println(builder.toString());
     }
 
     @Test(expected=BindingException.class)

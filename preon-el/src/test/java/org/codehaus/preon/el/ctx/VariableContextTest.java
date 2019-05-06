@@ -27,10 +27,8 @@ package org.codehaus.preon.el.ctx;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.codehaus.preon.el.BindingException;
-import org.codehaus.preon.el.Document;
 import org.codehaus.preon.el.InvalidExpressionException;
 import org.codehaus.preon.el.Reference;
-import org.codehaus.preon.el.util.StringBuilderDocument;
 
 
 public class VariableContextTest {
@@ -83,56 +81,6 @@ public class VariableContextTest {
         assertEquals(reference, reference);
     }
 
-    @Test
-    public void testDocumentation() throws InvalidExpressionException {
-        VariableDefinitions defs = new DataVariableDefinitions();
-        VariableContext context = new VariableContext(defs);
-        Reference<VariableResolver> reference = context.selectAttribute("data");
-        Document document = null;
-
-        document = new StringBuilderDocument();
-        reference.document(document);
-        assertEquals("the data", document.toString());
-
-        documentProperty(reference);
-        documentArrayElement(context, reference);
-        documentPropertyOfArrayElement(context, reference);
-    }
-
-
-    private void documentArrayElement(VariableContext context,
-            Reference<VariableResolver> reference)
-            throws InvalidExpressionException {
-        Document document;
-        reference = reference.selectAttribute("datas");
-        reference = reference.selectItem("1");
-        document = new StringBuilderDocument();
-        reference.document(document);
-        assertEquals("the second element of the datas (a Data[]) of the data",
-                document.toString());
-    }
-
-    private void documentPropertyOfArrayElement(VariableContext context,
-            Reference<VariableResolver> reference)
-            throws InvalidExpressionException {
-        Document document;
-        reference = reference.selectAttribute("datas");
-        reference = reference.selectItem("1");
-        reference = reference.selectAttribute("number");
-        document = new StringBuilderDocument();
-        reference.document(document);
-        assertEquals(
-                "the number (a int) of the second element of the datas (a Data[]) of the data",
-                document.toString());
-    }
-
-    private void documentProperty(Reference<VariableResolver> reference) {
-        Document document;
-        reference = reference.selectAttribute("number");
-        document = new StringBuilderDocument();
-        reference.document(document);
-        assertEquals("the number (a int) of the data", document.toString());
-    }
 
     public static class Data {
 
@@ -175,11 +123,6 @@ public class VariableContextTest {
         public Class getType(String name) {
             return Data.class;
         }
-
-        public void document(Document target) {
-            target.text("an object with variable data");
-        }
-
     }
 
 }

@@ -24,15 +24,14 @@
  */
 package org.codehaus.preon.codec;
 
-import org.codehaus.preon.el.Expression;
-import org.codehaus.preon.el.Expressions;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
-import org.codehaus.preon.*;
+import org.codehaus.preon.Builder;
+import org.codehaus.preon.Codec;
+import org.codehaus.preon.DecodingException;
+import org.codehaus.preon.Resolver;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
-import org.codehaus.preon.descriptor.Documenters;
+import org.codehaus.preon.el.Expression;
+import org.codehaus.preon.el.Expressions;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -115,65 +114,6 @@ class ArrayCodec implements Codec<Object> {
 
     public Class<?> getType() {
         return type;
-    }
-
-    public CodecDescriptor getCodecDescriptor() {
-        return new CodecDescriptor() {
-
-            public <C extends SimpleContents<?>> Documenter<C> details(
-                    final String bufferReference) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        if (size != null) {
-                            target
-                                    .para()
-                                    .text(
-                                            "The number of elements in the list ")
-                                    .text("is ")
-                                    .document(
-                                            Documenters
-                                                    .forExpression(ArrayCodec.this.size))
-                                    .text(".").end();
-                        }
-                        if (!codec.getCodecDescriptor()
-                                .requiresDedicatedSection()) {
-                            target.document(codec.getCodecDescriptor()
-                                    .details(bufferReference));
-                        }
-                    }
-                };
-            }
-
-            public String getTitle() {
-                return null;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> reference(
-                    final Adjective adjective, final boolean startWithCapital) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target.text(adjective.asTextPreferA(startWithCapital)).text(
-                                "list of ").document(
-                                codec.getCodecDescriptor().reference(
-                                        Adjective.NONE, false)).text(" elements");
-                    }
-                };
-            }
-
-            public boolean requiresDedicatedSection() {
-                return false;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> summary() {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target.document(reference(Adjective.A, true));
-                        target.text(".");
-                    }
-                };
-            }
-
-        };
     }
 
     public String toString() {

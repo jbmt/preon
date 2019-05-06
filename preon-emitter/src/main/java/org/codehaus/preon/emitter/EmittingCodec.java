@@ -24,10 +24,12 @@
  */
 package org.codehaus.preon.emitter;
 
-import org.codehaus.preon.*;
+import org.codehaus.preon.Builder;
+import org.codehaus.preon.Codec;
+import org.codehaus.preon.DecodingException;
+import org.codehaus.preon.Resolver;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
-import org.codehaus.preon.descriptor.PassThroughCodecDescriptor2;
 import org.codehaus.preon.el.Expression;
 
 /**
@@ -116,9 +118,5 @@ public class EmittingCodec<T> implements Codec<T> {
         return codec.getType();
     }
 
-    public CodecDescriptor getCodecDescriptor() {
-        return new PassThroughCodecDescriptor2(codec.getCodecDescriptor(),
-                false);
-    }
 
 }

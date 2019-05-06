@@ -32,11 +32,6 @@
             <version>2.1_3</version>
         </dependency>
         <dependency>
-            <groupId>nl.flotsam.pecia</groupId>
-            <artifactId>pecia</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.codehaus.preon</groupId>
             <artifactId>preon-io</artifactId>
             <version>1.2-SNAPSHOT</version>

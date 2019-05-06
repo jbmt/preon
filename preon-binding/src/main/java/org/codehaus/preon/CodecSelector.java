@@ -24,10 +24,9 @@
  */
 package org.codehaus.preon;
 
-import org.codehaus.preon.el.Expression;
-import nl.flotsam.pecia.ParaContents;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
+import org.codehaus.preon.el.Expression;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -60,13 +59,6 @@ public interface CodecSelector {
      * @return The <code>Collection</code> of all choices this selector will have to choose from.
      */
     Collection<Codec<?>> getChoices();
-
-    /**
-     * Documents the procedure for deciding among a couple of {@link Codec}s.
-     *
-     * @param para The context for generating the content.
-     */
-    void document(ParaContents<?> para);
 
     /** Returns an expression representing the number of bits inhabited by the actual selecting bit. */
     Expression<Integer, Resolver> getSize();

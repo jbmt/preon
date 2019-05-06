@@ -24,11 +24,10 @@
  */
 package org.codehaus.preon.el.ast;
 
-import java.util.Set;
-
-import org.codehaus.preon.el.Document;
 import org.codehaus.preon.el.Reference;
 import org.codehaus.preon.el.ReferenceContext;
+
+import java.util.Set;
 
 /**
  * The superclass of reference nodes.
@@ -50,10 +49,6 @@ public class IntegerReferenceNode<E> extends AbstractNode<Integer, E> {
 
     public void gather(Set<Reference<E>> references) {
         references.add(reference);
-    }
-
-    public void document(Document target) {
-        reference.document(target);
     }
 
     @Override

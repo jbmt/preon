@@ -24,16 +24,13 @@
  */
 package org.codehaus.preon.codec;
 
-import org.codehaus.preon.el.Document;
-import org.codehaus.preon.el.Expression;
-import org.codehaus.preon.el.Expressions;
-import nl.flotsam.pecia.ParaContents;
 import org.codehaus.preon.*;
-import org.codehaus.preon.CodecDescriptor.Adjective;
 import org.codehaus.preon.annotation.TypePrefix;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.buffer.ByteOrder;
 import org.codehaus.preon.channel.BitChannel;
+import org.codehaus.preon.el.Expression;
+import org.codehaus.preon.el.Expressions;
 
 import java.io.IOException;
 import java.util.*;
@@ -152,36 +149,6 @@ public class TypePrefixSelectorFactory implements CodecSelectorFactory {
                 }
             }
             return null;
-        }
-
-        public void document(final ParaContents<?> para) {
-            para.text(" The particular choice is based on a " + size + "-bit ");
-            para.text(" value preceeding the actual encoded value.");
-            for (int i = 0; i < codecs.size(); i++) {
-                Codec<?> codec = codecs.get(i);
-                Expression<Integer, Resolver> expression = expressions.get(i);
-                para.text(" If ");
-                expression.document(new Document() {
-
-                    public Document detail(String text) {
-                        para.text(text);
-                        return this;
-                    }
-
-                    public void link(Object object, String text) {
-                        para.text(text);
-                    }
-
-                    public void text(String text) {
-                        para.text(text);
-                    }
-
-                });
-                para
-                        .text(", then ").document(
-                        codec.getCodecDescriptor().reference(Adjective.THE, false));
-                para.text(" will be choosen.");
-            }
         }
 
         public Expression<Integer, Resolver> getSize() {

@@ -24,15 +24,12 @@
  */
 package org.codehaus.preon.codec;
 
-import org.codehaus.preon.el.Expression;
-import org.codehaus.preon.el.Expressions;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
 import org.codehaus.preon.*;
 import org.codehaus.preon.annotation.Bound;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
+import org.codehaus.preon.el.Expression;
+import org.codehaus.preon.el.Expressions;
 
 import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
@@ -81,47 +78,6 @@ public class BooleanCodecFactory implements CodecFactory {
 
         public void encode(Boolean value, BitChannel channel, Resolver resolver) throws IOException {
             channel.write(value);
-        }
-
-        public CodecDescriptor getCodecDescriptor() {
-            return new CodecDescriptor() {
-
-                public <T extends SimpleContents<?>> Documenter<T> details(
-                        String bufferReference) {
-                    return new Documenter<T>() {
-                        public void document(T target) {
-                        }
-                    };
-                }
-
-                public String getTitle() {
-                    return null;
-                }
-
-                public <T extends ParaContents<?>> Documenter<T> reference(
-                        final Adjective adjective, boolean startWithCapital) {
-                    return new Documenter<T>() {
-                        public void document(T target) {
-                            target.text(adjective == Adjective.A ? "a " : "the ");
-                            target.text("boolean value");
-                        }
-                    };
-                }
-
-                public boolean requiresDedicatedSection() {
-                    return false;
-                }
-
-                public <T extends ParaContents<?>> Documenter<T> summary() {
-                    return new Documenter<T>() {
-                        public void document(T target) {
-                            target.text("A one-bit representation of a boolean value: ");
-                            target.text("1 = true; 0 = false.");
-                        }
-                    };
-                }
-
-            };
         }
 
         public Class<?>[] getTypes() {

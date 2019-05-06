@@ -24,16 +24,11 @@
  */
 package org.codehaus.preon.codec;
 
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
-import nl.flotsam.pecia.Table2Cols;
 import org.codehaus.preon.*;
 import org.codehaus.preon.annotation.Choices;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.buffer.ByteOrder;
 import org.codehaus.preon.channel.BitChannel;
-import org.codehaus.preon.descriptor.Documenters;
 import org.codehaus.preon.el.*;
 
 import java.lang.reflect.AnnotatedElement;
@@ -302,12 +297,6 @@ public class SelectFromCodec<T> implements Codec<T> {
                     .selectItem(index));
         }
 
-        public void document(Document target) {
-            target.text("either the prefix variable or ");
-            context.document(target);
-            target.text(" (" + context.getClass() + ")");
-        }
-
         private static class PrefixReference implements Reference<Resolver> {
 
             private ReferenceContext<Resolver> context;
@@ -345,11 +334,6 @@ public class SelectFromCodec<T> implements Codec<T> {
                 throw new BindingException("No item selection allowed.");
             }
 
-            public void document(Document target) {
-                target.text("the value of the first ");
-                target.text(Integer.toString(prefixSize));
-                target.text(" bits");
-            }
 
             public Class<?> getType() {
                 return Integer.class;
@@ -400,110 +384,4 @@ public class SelectFromCodec<T> implements Codec<T> {
 
     }
 
-    public CodecDescriptor getCodecDescriptor() {
-        return new CodecDescriptor() {
-
-            public <C extends SimpleContents<?>> Documenter<C> details(
-                    String bufferReference) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target
-                                .para()
-                                .text(
-                                        "The particular type of data structure is selected based on the value of "
-                                                + prefixSize + " leading bits.")
-                                .text(
-                                        " These bits are interpreted as an unsigned int.")
-                                .text(
-                                        " The table below lists the conditions, and the data structure assumed when these conditions are met.")
-                                .end();
-                        Table2Cols<?> table2Cols = target.table2Cols();
-                        table2Cols
-                                .header()
-                                .entry()
-                                .para()
-                                .text("Condition")
-                                .end()
-                                .entry()
-                                .para()
-                                .text("Data structure")
-                                .end()
-                                .end();
-                        for (int i = 0; i < conditions.size(); i++) {
-                            table2Cols
-                                    .row()
-                                    .entry()
-                                    .para()
-                                    .document(Documenters
-                                            .forExpression(conditions.get(i)))
-                                    .end()
-                                    .entry()
-                                    .para()
-                                    .document(
-                                            codecs.get(i).getCodecDescriptor()
-                                                    .reference(Adjective.A, false))
-                                    .end()
-                                    .end();
-                        }
-                        table2Cols.end();
-                    }
-                };
-            }
-
-            public String getTitle() {
-                return null;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> reference(
-                    final Adjective adjective, boolean startWithCapital) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        if (conditions.size() > 3) {
-                            switch (adjective) {
-                                case A:
-                                    target
-                                            .text("a data structure selected from a list of "
-                                                    + conditions.size());
-                                    break;
-                                case THE:
-                                    target
-                                            .text("the data structure selected from a list of "
-                                                    + conditions.size());
-                                    break;
-                                case NONE:
-                                    target.text("either one of "
-                                            + conditions.size());
-                                    break;
-                            }
-                        } else {
-                            for (int i = 0; i < conditions.size(); i++) {
-                                target.document(codecs.get(i)
-                                        .getCodecDescriptor().reference(
-                                        adjective, false));
-                                if (i < conditions.size() - 2) {
-                                    target.text(", ");
-                                }
-                                if (i == conditions.size() - 2) {
-                                    target.text(" or ");
-                                }
-                            }
-                        }
-                    }
-                };
-            }
-
-            public boolean requiresDedicatedSection() {
-                return false;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> summary() {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target.document(reference(Adjective.A, false)).text(".");
-                    }
-                };
-            }
-
-        };
-    }
 }

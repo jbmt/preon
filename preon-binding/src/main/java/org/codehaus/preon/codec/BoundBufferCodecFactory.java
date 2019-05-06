@@ -24,16 +24,12 @@
  */
 package org.codehaus.preon.codec;
 
-import org.codehaus.preon.el.Expression;
-import org.codehaus.preon.el.Expressions;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
 import org.codehaus.preon.*;
 import org.codehaus.preon.annotation.BoundBuffer;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
-import org.codehaus.preon.descriptor.Documenters;
+import org.codehaus.preon.el.Expression;
+import org.codehaus.preon.el.Expressions;
 
 import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
@@ -74,57 +70,6 @@ public class BoundBufferCodecFactory implements CodecFactory {
 
         public void encode(Object object, BitChannel channel, Resolver resolver) throws IOException {
             channel.write(criterion, 0, criterion.length);
-        }
-
-        public CodecDescriptor getCodecDescriptor() {
-            return new CodecDescriptor() {
-
-                public <C extends SimpleContents<?>> Documenter<C> details(
-                        String bufferReference) {
-                    return new Documenter<C>() {
-                        public void document(C target) {
-                            target
-                                    .para()
-                                    .text(
-                                            "The sequence is expected to match this hexidecimal sequence: ")
-                                    .document(
-                                            Documenters
-                                                    .forHexSequence(criterion))
-                                    .text(".").end();
-                        }
-                    };
-                }
-
-                public String getTitle() {
-                    return null;
-                }
-
-                public <C extends ParaContents<?>> Documenter<C> reference(
-                        final Adjective adjective,
-                        final boolean startWithCapital) {
-                    return new Documenter<C>() {
-                        public void document(C target) {
-                            target.text(
-                                    adjective.asTextPreferA(startWithCapital))
-                                    .text(" sequence of bytes");
-                        }
-                    };
-                }
-
-                public boolean requiresDedicatedSection() {
-                    return false;
-                }
-
-                public <C extends ParaContents<?>> Documenter<C> summary() {
-                    return new Documenter<C>() {
-                        public void document(C target) {
-                            target.document(reference(Adjective.A, true)).text(
-                                    ".");
-                        }
-                    };
-                }
-
-            };
         }
 
         public Expression<Integer, Resolver> getSize() {

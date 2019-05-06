@@ -25,11 +25,10 @@
 package org.codehaus.preon;
 
 import org.codehaus.preon.binding.*;
-import org.codehaus.preon.el.Expression;
-import nl.flotsam.pecia.*;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
 import org.codehaus.preon.codec.*;
+import org.codehaus.preon.el.Expression;
 
 import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
@@ -165,57 +164,6 @@ public class DefaultCodecFactory implements CodecFactory {
 
         public Class<?> getType() {
             return delegate.getType();
-        }
-
-        public CodecDescriptor getCodecDescriptor() {
-            return new CodecDescriptor() {
-
-                public <C extends SimpleContents<?>> Documenter<C> details(
-                        final String bufferReference) {
-                    return new Documenter<C>() {
-                        public void document(C target) {
-                            created.remove(delegate);
-                            target.document(delegate.getCodecDescriptor()
-                                    .details(bufferReference));
-                            for (Codec<?> codec : created) {
-                                assert codec != null;
-                                CodecDescriptor descriptor = codec
-                                        .getCodecDescriptor();
-                                assert descriptor != null;
-                                if (descriptor.requiresDedicatedSection() && target instanceof Contents) {
-                                    AnnotatedSection<?> section = ((Contents<?>) target)
-                                            .section(descriptor.getTitle());
-                                    section
-                                            .mark(descriptor.getTitle())
-                                            .document(
-                                                    descriptor
-                                                            .details(bufferReference));
-                                    section.end();
-                                }
-                            }
-                        }
-                    };
-                }
-
-                public String getTitle() {
-                    return delegate.getCodecDescriptor().getTitle();
-                }
-
-                public <C extends ParaContents<?>> Documenter<C> reference(
-                        Adjective adjective, boolean startWithCapital) {
-                    return delegate.getCodecDescriptor().reference(adjective, false);
-                }
-
-                public boolean requiresDedicatedSection() {
-                    return delegate.getCodecDescriptor()
-                            .requiresDedicatedSection();
-                }
-
-                public <C extends ParaContents<?>> Documenter<C> summary() {
-                    return delegate.getCodecDescriptor().summary();
-                }
-
-            };
         }
 
     }

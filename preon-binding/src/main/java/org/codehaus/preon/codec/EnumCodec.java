@@ -25,23 +25,18 @@
 package org.codehaus.preon.codec;
 
 import org.codehaus.preon.*;
-import org.codehaus.preon.util.EnumUtils;
 import org.codehaus.preon.annotation.BoundNumber;
-import org.codehaus.preon.descriptor.Documenters;
-import org.codehaus.preon.channel.BitChannel;
-import org.codehaus.preon.buffer.ByteOrder;
 import org.codehaus.preon.buffer.BitBuffer;
+import org.codehaus.preon.buffer.ByteOrder;
+import org.codehaus.preon.channel.BitChannel;
 import org.codehaus.preon.el.Expression;
 import org.codehaus.preon.el.Expressions;
-import nl.flotsam.pecia.SimpleContents;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.Para;
-import nl.flotsam.pecia.ParaContents;
+import org.codehaus.preon.util.EnumUtils;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA. User: wilfred Date: Oct 24, 2009 Time: 5:03:58 PM To change this template use File |
@@ -99,84 +94,6 @@ public class EnumCodec<T> implements Codec<T> {
 
     public Class<?> getType() {
         return type;
-    }
-
-    public CodecDescriptor getCodecDescriptor() {
-        return new CodecDescriptor() {
-
-            public <C extends SimpleContents<?>> Documenter<C> details(
-                    String bufferReference) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        Para<?> para = target.para();
-                        if (!size.isParameterized()) {
-                            para.text("The symbol is represented as a ")
-                                    .document(
-                                            Documenters.forNumericValue(
-                                                    size.eval(null),
-                                                    byteOrder)).text(".");
-                        } else {
-                            para
-                                    .text(
-                                            "The symbol is represented as a numeric value (")
-                                    .document(
-                                            Documenters
-                                                    .forByteOrder(byteOrder))
-                                    .text(". The number of bits is ")
-                                    .document(
-                                            Documenters.forExpression(size))
-                                    .text(".");
-                        }
-                        para
-                                .text(
-                                        " The numeric value corresponds to the following symbols:")
-                                .end();
-                        for (Map.Entry<Long, T> entry : mapping.entrySet()) {
-                            if (entry.getKey() != null) {
-                                target.para().text(
-                                        Long.toString(entry.getKey()))
-                                        .text(": ")
-                                        .text(entry.getValue().toString())
-                                        .end();
-                            }
-                        }
-                        T defaultValue = mapping.get(null);
-                        if (defaultValue != null) {
-                            target.para().text("The default value is "
-                                    + defaultValue.toString() + ".").end();
-                        }
-                    }
-                };
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> reference(
-                    final Adjective adjective, boolean startWithCapital) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target.text(adjective.asTextPreferAn(false)).text(
-                                "index of an enumeration");
-                    }
-                };
-            }
-
-            public boolean requiresDedicatedSection() {
-                return false;
-            }
-
-            public String getTitle() {
-                return null;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> summary() {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target
-                                .text("A value from a set of symbols, represented by a numeric value.");
-                    }
-                };
-            }
-
-        };
     }
 
     /**

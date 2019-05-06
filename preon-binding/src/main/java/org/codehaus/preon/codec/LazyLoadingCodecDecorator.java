@@ -27,12 +27,11 @@ package org.codehaus.preon.codec;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import org.codehaus.preon.el.Expression;
 import org.codehaus.preon.*;
 import org.codehaus.preon.annotation.LazyLoading;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
-import org.codehaus.preon.descriptor.PassThroughCodecDescriptor2;
+import org.codehaus.preon.el.Expression;
 
 import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
@@ -155,11 +154,6 @@ public class LazyLoadingCodecDecorator implements CodecDecorator {
 
         public Class<?> getType() {
             return type;
-        }
-
-        public CodecDescriptor getCodecDescriptor() {
-            return new PassThroughCodecDescriptor2(wrapped
-                    .getCodecDescriptor(), false);
         }
 
     }

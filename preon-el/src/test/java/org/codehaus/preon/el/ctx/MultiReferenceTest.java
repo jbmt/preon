@@ -26,10 +26,8 @@ package org.codehaus.preon.el.ctx;
 
 import static org.junit.Assert.*;
 import org.codehaus.preon.el.BindingException;
-import org.codehaus.preon.el.Document;
 import org.codehaus.preon.el.Reference;
 import org.codehaus.preon.el.ReferenceContext;
-import org.codehaus.preon.el.util.StringBuilderDocument;
 
 import java.util.Date;
 import org.junit.Before;
@@ -152,82 +150,4 @@ public class MultiReferenceTest {
         assertNotNull(multi.selectAttribute(propertyName));
         verify(reference1, reference2, selected1, selected2);
     }
-
-    @Test
-    public void testSelectNonExistingProperty() {
-        StringBuilder builder = new StringBuilder();
-        Document document = new StringBuilderDocument(builder);
-        String propertyName = "pi";
-        Reference selected1 = createMock(Reference.class);
-        Reference selected2 = createMock(Reference.class);
-        expect(reference1.getType()).andReturn(String.class);
-        expect(reference2.getType()).andReturn(String.class);
-        expect(selected1.getType()).andReturn(String.class);
-        expect(reference1.getReferenceContext()).andReturn(context);
-        expect(reference2.getReferenceContext()).andReturn(context);
-        expect(reference1.selectAttribute(propertyName)).andReturn(selected1);
-        expect(reference2.selectAttribute(propertyName)).andThrow(new BindingException("No property pi"));
-        selected1.document(document);
-        expect(selected1.getReferenceContext()).andReturn(context);
-        replay(reference1, reference2, selected1, selected2);
-        MultiReference multi = new MultiReference(reference1, reference2);
-        Reference selected = multi.selectAttribute(propertyName);
-        assertNotNull(selected);
-        selected.document(document);
-        verify(reference1, reference2, selected1, selected2);
-    }
-
-    @Test
-    public void testNarrow() {
-        StringBuilder builder = new StringBuilder();
-        Document document = new StringBuilderDocument(builder);
-        String propertyName = "pi";
-        expect(reference1.narrow(String.class)).andReturn(reference1);
-        expect(reference2.narrow(String.class)).andReturn(reference2);
-        expect(reference1.getType()).andReturn(String.class).times(2);
-        expect(reference2.getType()).andReturn(String.class).times(2);
-        expect(reference1.getReferenceContext()).andReturn(context).times(2);
-        expect(reference2.getReferenceContext()).andReturn(context).times(2);
-        replay(reference1, reference2, context);
-        MultiReference multi = new MultiReference(reference1, reference2);
-        multi.narrow(String.class);
-        verify(reference1, reference2, context);
-    }
-
-    @Test
-    public void testNarrowPartly() {
-        StringBuilder builder = new StringBuilder();
-        Document document = new StringBuilderDocument(builder);
-        String propertyName = "pi";
-        expect(reference1.narrow(String.class)).andReturn(reference1);
-        expect(reference2.narrow(String.class)).andReturn(null);
-        expect(reference1.getType()).andReturn(String.class).times(2);
-        expect(reference2.getType()).andReturn(String.class).times(1);
-        expect(reference1.getReferenceContext()).andReturn(context).times(2);
-        expect(reference2.getReferenceContext()).andReturn(context).times(1);
-        replay(reference1, reference2, context);
-        MultiReference multi = new MultiReference(reference1, reference2);
-        multi.narrow(String.class);
-        verify(reference1, reference2, context);
-    }
-
-    @Test
-    public void testDocumentation() {
-        StringBuilderDocument document = new StringBuilderDocument();
-        expect(reference1.getReferenceContext()).andReturn(context);
-        expect(reference2.getReferenceContext()).andReturn(context);
-        expect(reference3.getReferenceContext()).andReturn(context);
-        expect(reference1.getType()).andReturn(String.class);
-        expect(reference2.getType()).andReturn(String.class);
-        expect(reference3.getType()).andReturn(String.class);
-        reference1.document(document);
-        reference2.document(document);
-        reference3.document(document);
-        replay(reference1, reference2, reference3);
-        MultiReference multi = new MultiReference(reference1, reference2, reference3);
-        multi.document(document);
-        System.out.println(document.toString());
-        verify(reference1, reference2, reference3);
-    }
-
 }

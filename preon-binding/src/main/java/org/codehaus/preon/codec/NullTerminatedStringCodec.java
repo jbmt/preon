@@ -24,26 +24,21 @@
  */
 package org.codehaus.preon.codec;
 
-import org.codehaus.preon.*;
-import org.codehaus.preon.channel.BitChannel;
-import org.codehaus.preon.buffer.BitBuffer;
+import org.codehaus.preon.Builder;
+import org.codehaus.preon.Codec;
+import org.codehaus.preon.DecodingException;
+import org.codehaus.preon.Resolver;
 import org.codehaus.preon.annotation.BoundString;
+import org.codehaus.preon.buffer.BitBuffer;
+import org.codehaus.preon.channel.BitChannel;
 import org.codehaus.preon.el.Expression;
-import nl.flotsam.pecia.SimpleContents;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-
+import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CharsetDecoder;
-import java.nio.BufferUnderflowException;
-import java.io.StringWriter;
-import java.io.IOException;
 
 /**
  * A {@link org.codehaus.preon.Codec} that reads null-terminated Strings. Basically, it will read bytes until it
@@ -139,50 +134,4 @@ public class NullTerminatedStringCodec implements Codec<String> {
         return String.class;
     }
 
-    public CodecDescriptor getCodecDescriptor() {
-        return new CodecDescriptor() {
-
-            public <C extends SimpleContents<?>> Documenter<C> details(
-                    String bufferReference) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        if (match != null && match.length() > 0) {
-                            target.para().text(
-                                    "The string is expected to match \"")
-                                    .text(match).text("\".").end();
-                        }
-                    }
-                };
-            }
-
-            public String getTitle() {
-                return null;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> reference(
-                    final Adjective adjective, boolean startWithCapital) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target.text(adjective.asTextPreferA(false)).text(
-                                "string of characters");
-                    }
-                };
-            }
-
-            public boolean requiresDedicatedSection() {
-                return false;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> summary() {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target
-                                .text("A null-terminated sequence of characters, encoded in "
-                                        + encoding + ".");
-                    }
-                };
-            }
-
-        };
-    }
 }

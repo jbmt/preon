@@ -24,15 +24,13 @@
  */
 package org.codehaus.preon.binding;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
-
-import org.codehaus.preon.el.ReferenceContext;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
 import org.codehaus.preon.Codec;
 import org.codehaus.preon.ResolverContext;
 import org.codehaus.preon.buffer.BitBuffer;
+import org.codehaus.preon.el.ReferenceContext;
+
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Field;
 
 /**
  * A factory for {@link Binding} instances.
@@ -49,10 +47,9 @@ public interface BindingFactory {
      * @param codec              The {@link Codec} to be used to decode instances of the type of object to be injected
      *                           in the {@link Field field}.
      * @param context            The {@link ReferenceContext context} for creating references.
-     * @param containerReference TODO
      * @return A new {@link Binding} instance, capable of loading data from a {@link BitBuffer} into an object's field.
      */
     Binding create(AnnotatedElement metadata, Field field, Codec<?> codec,
-                   ResolverContext context, Documenter<ParaContents<?>> containerReference);
+                   ResolverContext context);
 
 }

@@ -78,8 +78,4 @@ public class BooleanLiteralReference<E> implements Reference<E> {
     public Reference<E> selectItem(Expression<Integer, E> index) throws BindingException {
         throw new BindingException("No such indexed value");
     }
-
-    public void document(Document target) {
-        target.text(Boolean.toString(value));
-    }
 }

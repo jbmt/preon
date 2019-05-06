@@ -77,14 +77,6 @@ public interface Codec<T> {
     Expression<Integer, Resolver> getSize();
 
     /**
-     * Returns an object that is capable of rendering a description of the data structure encoded/decoded by this
-     * Codec.
-     *
-     * @return An object capable of describing the {@link Codec}.
-     */
-    CodecDescriptor getCodecDescriptor();
-
-    /**
      * Returns an array of types constructed potentially by this Codec.
      *
      * @return An array of types constructed potentially by this codec.

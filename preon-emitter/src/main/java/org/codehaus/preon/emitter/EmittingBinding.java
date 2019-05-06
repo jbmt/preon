@@ -24,8 +24,6 @@
  */
 package org.codehaus.preon.emitter;
 
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
 import org.codehaus.preon.Builder;
 import org.codehaus.preon.DecodingException;
 import org.codehaus.preon.Resolver;
@@ -54,14 +52,6 @@ public class EmittingBinding implements Binding {
         emitter.markStartLoad(binding.getName(), object);
         binding.load(object, buffer, resolver, builder);
         emitter.markEndLoad();
-    }
-
-    public <V extends SimpleContents<?>> V describe(V contents) {
-        return binding.describe(contents);
-    }
-
-    public <T, V extends ParaContents<T>> V writeReference(V contents) {
-        return binding.writeReference(contents);
     }
 
     public Class<?>[] getTypes() {

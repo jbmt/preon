@@ -24,8 +24,6 @@
  */
 package org.codehaus.preon.binding;
 
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
 import org.codehaus.preon.Codec;
 import org.codehaus.preon.ResolverContext;
 
@@ -42,8 +40,8 @@ public class DecoratingBindingFactory implements BindingFactory {
         this.bindingFactory = bindingFactory;
     }
 
-    public Binding create(AnnotatedElement metadata, Field field, Codec<?> codec, ResolverContext context, Documenter<ParaContents<?>> containerReference) {
-        Binding binding = bindingFactory.create(metadata, field, codec, context, containerReference);
+    public Binding create(AnnotatedElement metadata, Field field, Codec<?> codec, ResolverContext context) {
+        Binding binding = bindingFactory.create(metadata, field, codec, context);
         if (binding != null) {
             for (BindingDecorator decorator : bindingDecorators) {
                 binding = decorator.decorate(binding);

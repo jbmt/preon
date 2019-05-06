@@ -24,11 +24,6 @@
  */
 package org.codehaus.preon.el;
 
-import org.codehaus.preon.el.BindingException;
-import org.codehaus.preon.el.Document;
-import org.codehaus.preon.el.Expression;
-import org.codehaus.preon.el.Reference;
-import org.codehaus.preon.el.ReferenceContext;
 import org.codehaus.preon.Resolver;
 
 public class ContextReplacingReference implements Reference<Resolver> {
@@ -75,10 +70,6 @@ public class ContextReplacingReference implements Reference<Resolver> {
             throws BindingException {
         return new ContextReplacingReference(alternativeContext, reference
                 .selectItem(index));
-    }
-
-    public void document(Document target) {
-        reference.document(target);
     }
 
     public Reference<Resolver> narrow(Class<?> type) {

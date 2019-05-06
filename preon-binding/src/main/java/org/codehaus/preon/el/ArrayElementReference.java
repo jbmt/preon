@@ -24,16 +24,10 @@
  */
 package org.codehaus.preon.el;
 
-import java.lang.reflect.Array;
-
-import org.codehaus.preon.el.Document;
-import org.codehaus.preon.el.Expression;
-import org.codehaus.preon.el.Expressions;
-import org.codehaus.preon.el.Reference;
-import org.codehaus.preon.el.ReferenceContext;
-import org.codehaus.preon.el.ctx.PropertyReference;
 import org.codehaus.preon.Resolver;
-import org.codehaus.preon.util.TextUtils;
+import org.codehaus.preon.el.ctx.PropertyReference;
+
+import java.lang.reflect.Array;
 
 /**
  * A reference to an array element.
@@ -137,27 +131,6 @@ public class ArrayElementReference implements Reference<Resolver> {
     public boolean equals(ArrayElementReference other) {
         return arrayReference.equals(other.arrayReference)
                 && index.equals(other.index);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.codehaus.preon.el.Descriptive#document(org.codehaus.preon.el.Document)
-     */
-
-    public void document(Document target) {
-        if (!index.isParameterized()) {
-            target.text("the ");
-            target.text(TextUtils.getPositionAsText(index.eval(null)));
-            target.text(" element of ");
-            arrayReference.document(target);
-        } else {
-            target.text("the nth element of ");
-            arrayReference.document(target);
-            target.text(" (with n being ");
-            index.document(target);
-            target.text(")");
-        }
     }
 
     /*

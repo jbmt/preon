@@ -24,18 +24,11 @@
  */
 package org.codehaus.preon.el;
 
-import java.lang.reflect.Field;
-
-import org.codehaus.preon.el.BindingException;
-import org.codehaus.preon.el.Document;
-import org.codehaus.preon.el.Expression;
-import org.codehaus.preon.el.Expressions;
-import org.codehaus.preon.el.InvalidExpressionException;
-import org.codehaus.preon.el.Reference;
-import org.codehaus.preon.el.ReferenceContext;
 import org.codehaus.preon.Resolver;
 import org.codehaus.preon.rendering.CamelCaseRewriter;
 import org.codehaus.preon.rendering.IdentifierRewriter;
+
+import java.lang.reflect.Field;
 
 /**
  * A {@link Reference} to a property. (And in this case, property means a private field, not a bean property.)
@@ -141,19 +134,6 @@ public class PropertyReference implements Reference<Resolver> {
 
     public boolean equals(PropertyReference other) {
         return field.equals(other.field) && reference.equals(other.reference);
-    }
-
-    public void document(Document target) {
-        target.text("the " + rewriter.rewrite(field.getName()));
-        if (includeType) {
-            target.text(" (a ");
-            target.text(getType().getSimpleName());
-            target.text(") ");
-        } else {
-            target.text(" ");
-        }
-        target.text("of ");
-        reference.document(target);
     }
 
     public ReferenceContext<Resolver> getReferenceContext() {

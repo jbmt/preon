@@ -7,18 +7,6 @@
     <packaging>pom</packaging>
     <name>Preon</name>
     <url>http://preon.codehaus.org/</url>
-    <repositories>
-        <repository>
-            <id>pecia-repository</id>
-            <url>http://pecia.sourceforge.net/repository</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
     <developers>
         <developer>
             <id>springerw</id>
@@ -35,8 +23,6 @@
     <modules>
         <module>preon-io</module>
         <module>preon-binding</module>
-        <module>preon-samples</module>
-        <module>preon-archetypes</module>
         <module>preon-el</module>
         <module>preon-emitter</module>
     </modules>

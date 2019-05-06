@@ -24,23 +24,20 @@
  */
 package org.codehaus.preon.binding;
 
-import org.codehaus.preon.el.Expression;
-import org.codehaus.preon.el.ctx.VariableResolver;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
 import org.codehaus.preon.*;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.buffer.BitBufferException;
 import org.codehaus.preon.channel.BitChannel;
+import org.codehaus.preon.el.Expression;
+import org.codehaus.preon.el.ctx.VariableResolver;
 import org.codehaus.preon.reflect.ReflectionUtils;
 import org.codehaus.preon.rendering.CamelCaseRewriter;
 import org.codehaus.preon.rendering.IdentifierRewriter;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.IOException;
 
 /**
  * The {@link BindingFactory} that will simply create a simple {@link Binding} that unconditionally sets and takes the
@@ -56,9 +53,8 @@ public class StandardBindingFactory implements BindingFactory {
     private IdentifierRewriter rewriter = new CamelCaseRewriter();
 
     public Binding create(AnnotatedElement metadata, Field field,
-                          Codec<?> codec, ResolverContext context,
-                          Documenter<ParaContents<?>> containerReference) {
-        return new FieldBinding(field, codec, rewriter, containerReference);
+                          Codec<?> codec, ResolverContext context) {
+        return new FieldBinding(field, codec, rewriter);
     }
 
     private static class FieldBinding implements Binding {
@@ -75,15 +71,11 @@ public class StandardBindingFactory implements BindingFactory {
 
         private Decorator<VariableResolver> resolverDecorator;
 
-        private Documenter<ParaContents<?>> containerReference;
-
         public FieldBinding(Field field, Codec<?> codec,
-                            IdentifierRewriter rewriter,
-                            Documenter<ParaContents<?>> containerReference) {
+                            IdentifierRewriter rewriter) {
             this.field = field;
             this.codec = codec;
             this.rewriter = rewriter;
-            this.containerReference = containerReference;
             field.setAccessible(true);
             Class<?> declaring = field.getDeclaringClass();
             builderDecorator = new ContextualBuilderDecorator(declaring);
@@ -111,13 +103,6 @@ public class StandardBindingFactory implements BindingFactory {
             }
         }
 
-        public <V extends SimpleContents<?>> V describe(V contents) {
-            CodecDescriptor codecDescriptor = codec.getCodecDescriptor();
-            contents.para().document(codecDescriptor.summary()).end();
-            contents.document(codecDescriptor.details("buffer"));
-            return contents;
-        }
-
         public Class<?>[] getTypes() {
             return codec.getTypes();
         }
@@ -129,11 +114,6 @@ public class StandardBindingFactory implements BindingFactory {
 
         public String getName() {
             return field.getName();
-        }
-
-        public <T, V extends ParaContents<T>> V writeReference(V contents) {
-            contents.link(getId(), rewriter.rewrite(getName())).text(" of ").document(containerReference);
-            return contents;
         }
 
         public Expression<Integer, Resolver> getSize() {

@@ -27,10 +27,8 @@ package org.codehaus.preon.el.ast;
 import java.util.Set;
 
 import org.codehaus.preon.el.BindingException;
-import org.codehaus.preon.el.Document;
 import org.codehaus.preon.el.Reference;
 import org.codehaus.preon.el.ReferenceContext;
-import org.codehaus.preon.el.util.StringBuilderDocument;
 
 /**
  * A {@link Node} representing a combinatorial boolean operator.
@@ -63,33 +61,15 @@ public class BooleanOperatorNode<E> extends AbstractNode<Boolean, E> {
             <E> boolean holds(E context, Node<Boolean, E> lhs, Node<Boolean, E> rhs) {
                 return lhs.eval(context) && rhs.eval(context);
             }
-
-            <E> void document(Node<Boolean, E> lhs, Node<Boolean, E> rhs,
-                    org.codehaus.preon.el.Document target) {
-                lhs.document(target);
-                target.text(" and ");
-                rhs.document(target);
-            }
         },
 
         OR {
             <E> boolean holds(E context, Node<Boolean, E> lhs, Node<Boolean, E> rhs) {
                 return lhs.eval(context) || rhs.eval(context);
             }
-
-            <E> void document(Node<Boolean, E> lhs, Node<Boolean, E> rhs,
-                    org.codehaus.preon.el.Document target) {
-                lhs.document(target);
-                target.text(" or ");
-                rhs.document(target);
-            }
         };
 
         abstract <E> boolean holds(E context, Node<Boolean, E> lhs, Node<Boolean, E> rhs);
-
-        abstract <E> void document(Node<Boolean, E> lhs, Node<Boolean, E> rhs,
-                org.codehaus.preon.el.Document target);
-
     }
 
     /**
@@ -143,15 +123,6 @@ public class BooleanOperatorNode<E> extends AbstractNode<Boolean, E> {
     /*
      * (non-Javadoc)
      * 
-     * @see org.codehaus.preon.el.Descriptive#document(org.codehaus.preon.el.Document)
-     */
-    public void document(Document target) {
-        operator.document(lhs, rhs, target);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see org.codehaus.preon.el.ast.Node#gather(java.util.Set)
      */
     public void gather(Set<Reference<E>> references) {
@@ -195,7 +166,7 @@ public class BooleanOperatorNode<E> extends AbstractNode<Boolean, E> {
         if (!boolean.class.isAssignableFrom(node.getType())
                 && !Boolean.class.isAssignableFrom(node.getType())) {
             StringBuilder builder = new StringBuilder();
-            node.document(new StringBuilderDocument(builder));
+//            node.document(new StringBuilderDocument(builder));
             throw new BindingException("Reference " + builder.toString()
                     + " does not resolve to boolean.");
         } else {

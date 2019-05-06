@@ -49,7 +49,6 @@ public class NarrowingTest {
     public void testNoNarrowingPossible() {
         expect(context.selectAttribute("a")).andReturn(reference1);
         expect(reference1.getType()).andStubReturn(Integer.class);
-        reference1.document((Document) anyObject());
         replay(context, reference1);
         try {
             Expression expr = Expressions.createBoolean(context, "a=='123'");

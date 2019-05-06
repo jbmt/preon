@@ -57,7 +57,7 @@ public class StandardBindingFactoryTest {
     @Test
     public void shouldHaveAccessToNonPublicFields() throws Exception {
         Field field = Spam.class.getDeclaredField("eggs");
-        Binding binding = factory.create(null, field, codec, null, null);
+        Binding binding = factory.create(null, field, codec, null);
         binding.save(new Spam(), null, null);
     }
 }

@@ -24,14 +24,11 @@
  */
 package org.codehaus.preon.codec;
 
-import org.codehaus.preon.el.Expression;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
 import org.codehaus.preon.*;
 import org.codehaus.preon.annotation.ByteAlign;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
+import org.codehaus.preon.el.Expression;
 
 import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
@@ -90,48 +87,6 @@ public class ByteAligningDecorator implements CodecDecorator {
 
         public Class<?> getType() {
             return decorated.getType();
-        }
-
-        public CodecDescriptor getCodecDescriptor() {
-            return new CodecDescriptor() {
-
-                public <C extends SimpleContents<?>> Documenter<C> details(
-                        String bufferReference) {
-                    return new Documenter<C>() {
-                        public void document(C target) {
-                            target
-                                    .para()
-                                    .text("If - after reading ")
-                                    .document(
-                                            decorated.getCodecDescriptor()
-                                                    .reference(Adjective.THE, false))
-                                    .text(" - the pointer is ")
-                                    .emphasis("not")
-                                    .text(
-                                            " at the end of the byte, then the last couple of bits will be skipped.")
-                                    .end();
-                        }
-                    };
-                }
-
-                public String getTitle() {
-                    return null;
-                }
-
-                public <C extends ParaContents<?>> Documenter<C> reference(
-                        Adjective adjective, boolean startWithCapital) {
-                    return decorated.getCodecDescriptor().reference(adjective, false);
-                }
-
-                public boolean requiresDedicatedSection() {
-                    return false;
-                }
-
-                public <C extends ParaContents<?>> Documenter<C> summary() {
-                    return decorated.getCodecDescriptor().summary();
-                }
-
-            };
         }
 
     }

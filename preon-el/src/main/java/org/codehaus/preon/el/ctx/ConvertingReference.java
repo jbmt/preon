@@ -25,7 +25,6 @@
 package org.codehaus.preon.el.ctx;
 
 import org.codehaus.preon.el.BindingException;
-import org.codehaus.preon.el.Document;
 import org.codehaus.preon.el.Expression;
 import org.codehaus.preon.el.Reference;
 import org.codehaus.preon.el.ReferenceContext;
@@ -74,10 +73,6 @@ public class ConvertingReference<T, E> implements Reference<E> {
         return reference.selectItem(index);
     }
 
-    public void document(Document target) {
-        reference.document(target);
-    }
-    
     public static <T,E> ConvertingReference<T, E> create(Class<T> type, Reference<E> reference) {
         return new ConvertingReference<T, E>(type, reference);
     }

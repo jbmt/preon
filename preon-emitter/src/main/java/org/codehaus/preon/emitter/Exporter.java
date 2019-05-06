@@ -25,8 +25,6 @@
 package org.codehaus.preon.emitter;
 
 import org.apache.commons.io.IOUtils;
-import org.codehaus.preon.*;
-import org.codehaus.preon.binding.BindingDecorator;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -35,31 +33,30 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
-import java.nio.ByteBuffer;
 
 public class Exporter {
 
     private Exporter() {
     }
 
-    public static <T> T decodeAndExport(Class<T> type,
-                                        ByteBuffer buffer,
-                                        File structure)
-            throws DecodingException, IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Emitter emitter = new XmlEmitter(new ByteArrayOutputStreamFactory(out));
-        EmittingCodecDecorator codecDecorator = new EmittingCodecDecorator(emitter);
-        EmittingBindingDecorator bindingDecorator = new EmittingBindingDecorator(emitter);
-        Codec<T> codec = Codecs.create(type,
-                new CodecFactory[0],
-                new CodecDecorator[]{codecDecorator},
-                new BindingDecorator[]{bindingDecorator});
-        T result = Codecs.decode(codec, buffer);
-        saveEmitted(out.toByteArray(), structure);
-        exportResource("/jquery-1.4.2.min.js", structure.getParentFile());
-        exportResource("/jquery.callout-min.js", structure.getParentFile());
-        return result;
-    }
+//    public static <T> T decodeAndExport(Class<T> type,
+//                                        ByteBuffer buffer,
+//                                        File structure)
+//            throws DecodingException, IOException {
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        Emitter emitter = new XmlEmitter(new ByteArrayOutputStreamFactory(out));
+//        EmittingCodecDecorator codecDecorator = new EmittingCodecDecorator(emitter);
+//        EmittingBindingDecorator bindingDecorator = new EmittingBindingDecorator(emitter);
+//        Codec<T> codec = Codecs.create(type,
+//                new CodecFactory[0],
+//                new CodecDecorator[]{codecDecorator},
+//                new BindingDecorator[]{bindingDecorator});
+//        T result = Codecs.decode(codec, buffer);
+//        saveEmitted(out.toByteArray(), structure);
+//        exportResource("/jquery-1.4.2.min.js", structure.getParentFile());
+//        exportResource("/jquery.callout-min.js", structure.getParentFile());
+//        return result;
+//    }
 
     private static void saveEmitted(byte[] bytes, File structure) {
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);

@@ -27,10 +27,6 @@ package org.codehaus.preon.codec;
 import org.codehaus.preon.el.Expression;
 import org.codehaus.preon.el.Expressions;
 import org.codehaus.preon.el.util.ClassUtils;
-import nl.flotsam.pecia.Documenter;
-import nl.flotsam.pecia.Para;
-import nl.flotsam.pecia.ParaContents;
-import nl.flotsam.pecia.SimpleContents;
 import org.codehaus.preon.*;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.channel.BitChannel;
@@ -137,83 +133,6 @@ public class SwitchingCodec implements Codec<Object> {
         Class<?>[] result = new Class<?>[0];
         result = new ArrayList<Class<?>>(types).toArray(result);
         return ClassUtils.calculateCommonSuperType(result);
-    }
-
-    public CodecDescriptor getCodecDescriptor() {
-        return new CodecDescriptor() {
-
-            public <C extends SimpleContents<?>> Documenter<C> details(
-                    String bufferReference) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        Para<?> para = target.para();
-                        selector.document(para);
-                        para.end();
-                    }
-                };
-            }
-
-            public String getTitle() {
-                return null;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> reference(
-                    final Adjective adjective, boolean startWithCapital) {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        if (selector.getChoices().size() <= 3) {
-                            target.text(adjective.asTextPreferA(false)).text(
-                                    "either ");
-                            List<Codec<?>> codecs = Arrays.asList(selector
-                                    .getChoices().toArray(new Codec<?>[0]));
-                            for (int i = 0; i < codecs.size(); i++) {
-                                target.document(codecs.get(i)
-                                        .getCodecDescriptor().reference(
-                                        Adjective.NONE, false));
-                                if (i > codecs.size() - 2) {
-                                    // Do nothing
-                                } else if (i == codecs.size() - 2) {
-                                    target.text(" or ");
-                                } else if (i < codecs.size() - 2) {
-                                    target.text(", ");
-                                }
-                            }
-                            target.text(" elements");
-                        } else {
-                            target.text(adjective.asTextPreferA(false)).text(
-                                    "list of elements");
-                        }
-                    }
-                };
-            }
-
-            public boolean requiresDedicatedSection() {
-                return false;
-            }
-
-            public <C extends ParaContents<?>> Documenter<C> summary() {
-                return new Documenter<C>() {
-                    public void document(C target) {
-                        target.text("A list of ");
-                        List<Codec<?>> codecs = Arrays.asList(selector
-                                .getChoices().toArray(new Codec<?>[0]));
-                        for (int i = 0; i < codecs.size(); i++) {
-                            target.document(codecs.get(i).getCodecDescriptor()
-                                    .reference(Adjective.NONE, false));
-                            if (i > codecs.size() - 2) {
-                                // Do nothing
-                            } else if (i == codecs.size() - 2) {
-                                target.text(" or ");
-                            } else if (i < codecs.size() - 2) {
-                                target.text(", ");
-                            }
-                        }
-                        target.text(" elements.");
-                    }
-                };
-            }
-
-        };
     }
 
 }

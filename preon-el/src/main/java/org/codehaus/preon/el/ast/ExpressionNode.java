@@ -26,7 +26,6 @@ package org.codehaus.preon.el.ast;
 
 import java.util.Set;
 
-import org.codehaus.preon.el.Document;
 import org.codehaus.preon.el.Expression;
 import org.codehaus.preon.el.Reference;
 import org.codehaus.preon.el.ReferenceContext;
@@ -106,15 +105,6 @@ public class ExpressionNode<T extends Comparable<T>, E> extends AbstractNode<T, 
      */
     public boolean isParameterized() {
         return expression.isParameterized();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.codehaus.preon.el.Descriptive#document(org.codehaus.preon.el.Document)
-     */
-    public void document(Document target) {
-        expression.document(target);
     }
 
 }

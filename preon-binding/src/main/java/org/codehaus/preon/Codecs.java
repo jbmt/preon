@@ -24,33 +24,15 @@
  */
 package org.codehaus.preon;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-
-import javax.xml.stream.XMLStreamException;
-
-import nl.flotsam.pecia.builder.ArticleDocument;
-import nl.flotsam.pecia.builder.base.DefaultArticleDocument;
-import nl.flotsam.pecia.builder.base.DefaultDocumentBuilder;
-import nl.flotsam.pecia.builder.html.HtmlDocumentBuilder;
-import nl.flotsam.pecia.builder.xml.StreamingXmlWriter;
-import nl.flotsam.pecia.builder.xml.XmlWriter;
 import org.codehaus.preon.binding.BindingDecorator;
 import org.codehaus.preon.buffer.BitBuffer;
 import org.codehaus.preon.buffer.DefaultBitBuffer;
 import org.codehaus.preon.channel.BitChannel;
 import org.codehaus.preon.channel.OutputStreamBitChannel;
 
-import org.apache.commons.io.IOUtils;
-
-import com.ctc.wstx.stax.WstxOutputFactory;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 /**
  * A utility class, providing some convenience mechanisms for using and documenting {@link Codec Codecs}.
@@ -60,99 +42,6 @@ import com.ctc.wstx.stax.WstxOutputFactory;
 public class Codecs {
 
     private static final Builder DEFAULT_BUILDER = new DefaultBuilder();
-
-
-    /**
-     * An enumeration of potential documentation types.
-     *
-     * @see Codecs#document(Codec, org.codehaus.preon.Codecs.DocumentType, File)
-     * @see Codecs#document(Codec, org.codehaus.preon.Codecs.DocumentType, OutputStream)
-     */
-    public enum DocumentType {
-
-        Html {
-
-            @Override
-            public DefaultDocumentBuilder createDocumentBuilder(XmlWriter writer) {
-                return new HtmlDocumentBuilder(writer, this.getClass()
-                        .getResource("/default.css")) {
-
-                };
-            }
-        };
-
-        /**
-         * Returns a {@link DefaultDocumentBuilder} instance for the given type of document.
-         *
-         * @param writer The {@link XmlWriter} to which the document will be written.
-         * @return A {@link DefaultDocumentBuilder} capable of rendering the desired document format.
-         */
-        public abstract DefaultDocumentBuilder createDocumentBuilder(
-                XmlWriter writer);
-
-    }
-
-    /**
-     * Documents the codec, writing a document of the given type to the given file.
-     *
-     * @param <T>   The type of objects decoded by the {@link Codec}.
-     * @param codec The actual codec.
-     * @param type  The type of document type of the document generated.
-     * @param file  The file to which all output needs to be written.
-     * @throws FileNotFoundException If the file cannot be written.
-     */
-    public static <T> void document(Codec<T> codec, DocumentType type, File file)
-            throws FileNotFoundException {
-        OutputStream out = null;
-        try {
-            out = new FileOutputStream(file);
-            document(codec, type, out);
-        } finally {
-            IOUtils.closeQuietly(out);
-        }
-    }
-
-    /**
-     * Documents the codec, writing a document of the given type to the given {@link OutputStream}.
-     *
-     * @param <T>   The type of objects decoded by the {@link Codec}.
-     * @param codec The actual codec.
-     * @param type  The type of document type of the document generated.
-     * @param out   The {@link OutputStream} receiving the document.
-     */
-    public static <T> void document(Codec<T> codec, DocumentType type,
-                                    OutputStream out) {
-        WstxOutputFactory documentFactory = new WstxOutputFactory();
-        XmlWriter writer;
-        try {
-            writer = new StreamingXmlWriter(documentFactory
-                    .createXMLStreamWriter(out));
-            DefaultDocumentBuilder builder = type.createDocumentBuilder(writer);
-            ArticleDocument document = new DefaultArticleDocument(builder,
-                    codec.getCodecDescriptor().getTitle());
-            document(codec, document);
-            document.end();
-        } catch (XMLStreamException e) {
-            // In the unlikely event this happens:
-            throw new RuntimeException("Failed to create stream writer.");
-        }
-    }
-
-    /**
-     * Documents the codec, writing contents to the {@link ArticleDocument} passed in.
-     *
-     * @param <T>      The type of objects decoded by the {@link Codec}.
-     * @param codec    The actual codec.
-     * @param document The document in which the documentation of the Codec needs to be generated.
-     */
-    public static <T> void document(Codec<T> codec, ArticleDocument document) {
-        CodecDescriptor descriptor = codec.getCodecDescriptor();
-        if (descriptor.requiresDedicatedSection()) {
-            document.document(descriptor.details("buffer"));
-        } else {
-            document.para().text("Full description missing.").end();
-        }
-    }
 
     /**
      * Decodes an object from the buffer passed in.
