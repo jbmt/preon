@@ -20,33 +20,22 @@
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr-runtime</artifactId>
-            <version>3.3</version>
         </dependency>
+
+        <!-- test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
-            <version>2.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <goals>deploy</goals>
-                    <tagBase>https://limbo.svn.sourceforge.net/svnroot/limbo/tags</tagBase>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <arguments>-Prelease</arguments>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -78,26 +67,6 @@
                 <configuration>
                     <verbose>true</verbose>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>process-test-resources</phase>
-                        <id>cobertura:bugfix</id>
-                        <configuration>
-                            <tasks>
-                                <copy file="${basedir}/target/cobertura/cobertura.ser" todir="${basedir}/"
-                                      overwrite="true" failonerror="false"/>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
@@ -190,30 +159,4 @@
             </plugin>
         </plugins>
     </reporting>
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.1</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    <properties>
-        <fonts.dir>/Users/zhenhui/Library/Fonts</fonts.dir>
-    </properties>
 </project>
