@@ -9,16 +9,6 @@
     <url>http://preon.codehaus.org/</url>
     <repositories>
         <repository>
-            <id>limbo-repository</id>
-            <url>http://limbo.sourceforge.net/repository</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
             <id>pecia-repository</id>
             <url>http://pecia.sourceforge.net/repository</url>
             <snapshots>
@@ -164,4 +154,17 @@
     <properties>
         <currentVersion>${version}</currentVersion>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>rdc-releases</id>
+            <name>Nexus Release Repository</name>
+            <url>https://repo.rdc.aliyun.com/repository/12270-release-vTDcHk/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>https://repo.rdc.aliyun.com/repository/12270-snapshot-Pp1ZII/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
